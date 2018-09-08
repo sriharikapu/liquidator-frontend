@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
-import * as Blockchain from '../blockchainHandler';
+import web3 from './web3';
 
 class CloseWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ cdpId: event.target.value });
   }
 
   render() {
     return (
       <section className="frame">
-        <div>{this.props.account}</div>
-        <div>{this.props.proxy}</div>
+        <form>
+          <label>
+            CDP ID:
+            <input
+              type="text"
+              name="cdpId"
+              value={this.state.cdpId}
+              onChange={this.handleChange}
+            />
+          </label>
+        </form>
+
+        <button>give CDP to liquidator</button>
+        <button>liquidate CDP</button>
       </section>
     );
   }
