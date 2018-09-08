@@ -1,0 +1,17 @@
+[
+  {
+    "constant": false,
+    "inputs": [{ "name": "_cup", "type": "bytes32" }],
+    "name": "close",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "name": "_tub", "type": "address" }],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  }
+]

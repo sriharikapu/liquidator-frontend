@@ -29,7 +29,7 @@ class Widget extends Component {
           <div>
             <CloseWidget
               account={this.props.account}
-              cdpId={this.props.cdpId}
+              proxy={this.props.proxy}
             />
           </div>
         ) : (
