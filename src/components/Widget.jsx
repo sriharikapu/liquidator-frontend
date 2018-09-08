@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import TradeWidget from './TradeWidget';
-// import TaxWidget from './TaxWidget';
+import CloseWidget from './CloseWidget';
 
 import Wallets from './Wallets';
 import LockedAccount from './LockedAccount';
@@ -24,29 +23,7 @@ class Widget extends Component {
             : this.props.account && isAddress(this.props.account)
               ? <div>
                 {
-                  // this.props.section === 'tax-exporter'
-                  //   ?
-                  //   <TaxWidget account={this.props.account}
-                  //              network={this.props.network} />
-                  //   :
-                    <TradeWidget network={this.props.network}
-                                 loadingAddress={this.props.loadingAddress}
-                                 account={this.props.account}
-                                 proxy={this.props.proxy}
-                                 trade={this.props.trade}
-                                 balances={this.props.balances}
-                                 showTxMessage={this.props.showTxMessage}
-                                 transactions={this.props.transactions}
-                                 setMainState={this.props.setMainState}
-                                 fasterGasPrice={this.props.fasterGasPrice}
-                                 doTrade={this.props.doTrade}
-                                 reset={this.props.reset}
-                                 calculateBuyAmount={this.props.calculateBuyAmount}
-                                 calculatePayAmount={this.props.calculatePayAmount}
-                                 cleanInputs={this.props.cleanInputs}
-                                 showHW={this.props.showHW}
-                                 onDisconnect = {this.props.showClientChoice}/>
-
+                  <CloseWidget />
                 }
               </div>
               // Create a decorator Component that returns a component which is wrapped into element with only back function passed as argument
