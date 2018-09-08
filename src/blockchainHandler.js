@@ -14,6 +14,7 @@ schema.dsproxy = require('./abi/dsproxy');
 schema.matchingmarket = require('./abi/matchingmarket');
 schema.proxycreateandexecute = require('./abi/proxycreateandexecute');
 schema.liquidator = require('./abi/liquidator');
+schema.saitub = require('./abi/saitub');
 
 export const objects = {};
 
