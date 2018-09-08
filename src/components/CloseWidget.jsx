@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { IdentityIcon, Circle } from "./Icons";
 
 class CloseWidget extends Component {
   render() {
-    return (
-    <section className="frame">
-      <div style={ {position: 'relative'} }>
-      HI
-      </div>
-    </section>
-    )
+    return <div />;
   }
 }
 

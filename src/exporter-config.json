@@ -123,14 +123,10 @@
   },
   "taxProxyRegistries": {
     "kovan": {
-      "legacy": [
-        "0x383a7fc29edde64aec7f776e2517ec8819e147f1"
-      ]
+      "legacy": ["0x383a7fc29edde64aec7f776e2517ec8819e147f1"]
     },
     "main": {
-      "legacy": [
-        "0xaa63c8683647ef91b3fdab4b4989ee9588da297b"
-      ]
+      "legacy": ["0xaa63c8683647ef91b3fdab4b4989ee9588da297b"]
     }
   },
   "supportContracts": {

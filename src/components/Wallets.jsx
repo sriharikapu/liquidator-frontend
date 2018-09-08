@@ -1,87 +1,101 @@
-import React from 'react';
-import Product from '../ui-components/Product';
+import React from "react";
+import Product from "../ui-components/Product";
 import {
-  LedgerIcon, TrezorIcon, Circle, BackIcon, MetamaskIcon, ParityIcon, CoinbaseIcon,
-  StatusIcon, EthereumIcon, Grayscale, GrayMetamaskIcon
+  LedgerIcon,
+  TrezorIcon,
+  Circle,
+  BackIcon,
+  MetamaskIcon,
+  ParityIcon,
+  CoinbaseIcon,
+  StatusIcon,
+  EthereumIcon,
+  Grayscale,
+  GrayMetamaskIcon
 } from "./Icons";
 import Spinner from "./Spinner";
-import { getCurrentProviderName } from '../web3';
-
+import { getCurrentProviderName } from "../web3";
 
 const logos = {
-  metamask: {icon: <MetamaskIcon/>, name: "Metamask"},
-  parity: {icon: <ParityIcon/>, name: "Parity"},
-  coinbase: {icon: <CoinbaseIcon/>, name: "Coinbase Wallet"},
-  status: {icon: <StatusIcon/>, name: "Status"}
-}
+  metamask: { icon: <MetamaskIcon />, name: "Metamask" },
+  parity: { icon: <ParityIcon />, name: "Parity" },
+  coinbase: { icon: <CoinbaseIcon />, name: "Coinbase Wallet" },
+  status: { icon: <StatusIcon />, name: "Status" }
+};
 
 class Wallets extends React.Component {
-
   constructor() {
     super();
 
     this.state = {
       hasProvider: false,
-      provider: '',
+      provider: "",
       shouldDisplayAvailableClients: false
-    }
+    };
   }
 
   componentWillMount = () => {
     if (window.web3) {
-      this.setState({hasProvider: true, provider: getCurrentProviderName()});
+      this.setState({ hasProvider: true, provider: getCurrentProviderName() });
     }
-  }
+  };
 
   switchToAvailableClientsView = () => {
-    this.setState({shouldDisplayAvailableClients: true});
-  }
+    this.setState({ shouldDisplayAvailableClients: true });
+  };
 
   connectLedger = () => {
-    this.props.showHW('ledger');
-  }
+    this.props.showHW("ledger");
+  };
 
   connectTrezor = () => {
-    this.props.showHW('trezor');
-  }
+    this.props.showHW("trezor");
+  };
 
   getToClientSelection = () => {
-    this.setState({shouldDisplayAvailableClients: false});
-  }
+    this.setState({ shouldDisplayAvailableClients: false });
+  };
 
-  logoFor = (provider) => {
+  logoFor = provider => {
     const logo = logos[provider];
 
     if (logo) {
-      return logos[provider].icon
+      return logos[provider].icon;
     }
 
-    return <EthereumIcon/>;
+    return <EthereumIcon />;
   };
 
-  grayScale = (Logo) => {
+  grayScale = Logo => {
     return class extends React.Component {
       render = () => (
-        <Grayscale><Logo/></Grayscale>
-      )
-    }
-  }
+        <Grayscale>
+          <Logo />
+        </Grayscale>
+      );
+    };
+  };
 
   selectWallet = () => {
     if (this.props.loadingAddress) {
-      return
+      return;
     }
 
     this.props.setWeb3WebClient();
-  }
+  };
 
   render() {
-    return <React.Fragment>
-      {
-        this.state.shouldDisplayAvailableClients
-          ? <section className="frame wallets">
-            <div style={{position: "absolute", zIndex: 2, top: "18px"}} onClick={this.getToClientSelection}>
-              <Circle><BackIcon/></Circle>
+    return (
+      <React.Fragment>
+        {this.state.shouldDisplayAvailableClients ? (
+          <section className="frame wallets">
+            <div
+              style={{ position: "absolute", zIndex: 2, top: "18px" }}
+              onClick={this.getToClientSelection}
+            >
+              <Circle>
+                <BackIcon />
+              </Circle>
             </div>
             <div className="decorator">
               <ul className="list">
@@ -90,11 +104,22 @@ class Wallets extends React.Component {
                     <h2>Desktop Clients</h2>
                   </div>
                   <div className="row-flex">
-                    <a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-                      <Product label="Metamask" logo={GrayMetamaskIcon}/>
+                    <a
+                      href="https://metamask.io/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Product label="Metamask" logo={GrayMetamaskIcon} />
                     </a>
-                    <a href="https://www.parity.io/" target="_blank" rel="noopener noreferrer">
-                      <Product label="Parity" logo={this.grayScale(ParityIcon)}/>
+                    <a
+                      href="https://www.parity.io/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Product
+                        label="Parity"
+                        logo={this.grayScale(ParityIcon)}
+                      />
                     </a>
                   </div>
                 </li>
@@ -103,18 +128,33 @@ class Wallets extends React.Component {
                     <h2>Mobile Clients</h2>
                   </div>
                   <div className="row-flex">
-                    <a href="https://status.im/" target="_blank" rel="noopener noreferrer">
-                      <Product label="Status" logo={this.grayScale(StatusIcon)}/>
+                    <a
+                      href="https://status.im/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Product
+                        label="Status"
+                        logo={this.grayScale(StatusIcon)}
+                      />
                     </a>
-                    <a href="https://wallet.coinbase.com" target="_blank" rel="noopener noreferrer">
-                      <Product label="Coinbase Wallet" logo={this.grayScale(CoinbaseIcon)}/>
+                    <a
+                      href="https://wallet.coinbase.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Product
+                        label="Coinbase Wallet"
+                        logo={this.grayScale(CoinbaseIcon)}
+                      />
                     </a>
                   </div>
                 </li>
               </ul>
             </div>
           </section>
-          : <section className="frame wallets">
+        ) : (
+          <section className="frame wallets">
             <div className="heading">
               <h2>Select Wallet Client</h2>
             </div>
@@ -123,43 +163,68 @@ class Wallets extends React.Component {
                 <ul className="list">
                   <li className="list-item">
                     <div className="browser-wallet">
-                      {
-                        this.state.hasProvider
-                          ? <React.Fragment>
-                            <div className="client-summary">
-                              {this.logoFor(getCurrentProviderName())}
-                              <div>
-                                <span className="label status">Connected</span>
-                                <span className="label">{logos[this.state.provider] ? logos[this.state.provider].name : this.state.provider}</span>
-                              </div>
+                      {this.state.hasProvider ? (
+                        <React.Fragment>
+                          <div className="client-summary">
+                            {this.logoFor(getCurrentProviderName())}
+                            <div>
+                              <span className="label status">Connected</span>
+                              <span className="label">
+                                {logos[this.state.provider]
+                                  ? logos[this.state.provider].name
+                                  : this.state.provider}
+                              </span>
                             </div>
-                            <button type="button" onClick={this.selectWallet}>{this.props.loadingAddress ?
-                              <Spinner theme="button"/> : 'Continue'}</button>
-                          </React.Fragment>
-                          : <React.Fragment>
-                            <div className="client-summary">
-                              <span className="label">No Client in use</span>
-                            </div>
-                            <button type="button" onClick={() => this.switchToAvailableClientsView()}> Show Clients</button>
-                          </React.Fragment>
-                      }
+                          </div>
+                          <button type="button" onClick={this.selectWallet}>
+                            {this.props.loadingAddress ? (
+                              <Spinner theme="button" />
+                            ) : (
+                              "Continue"
+                            )}
+                          </button>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <div className="client-summary">
+                            <span className="label">No Client in use</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => this.switchToAvailableClientsView()}
+                          >
+                            {" "}
+                            Show Clients
+                          </button>
+                        </React.Fragment>
+                      )}
                     </div>
                   </li>
                   <li className="list-item">
                     <div className="row-flex">
-                      <Product className="hw-wallet" label="Ledger" logo={LedgerIcon} disabled={this.props.loadingAddress}
-                               onClick={this.connectLedger}/>
-                      <Product className="hw-wallet" label="Trezor" logo={TrezorIcon} disabled={this.props.loadingAddress}
-                               onClick={this.connectTrezor}/>
+                      <Product
+                        className="hw-wallet"
+                        label="Ledger"
+                        logo={LedgerIcon}
+                        disabled={this.props.loadingAddress}
+                        onClick={this.connectLedger}
+                      />
+                      <Product
+                        className="hw-wallet"
+                        label="Trezor"
+                        logo={TrezorIcon}
+                        disabled={this.props.loadingAddress}
+                        onClick={this.connectTrezor}
+                      />
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
           </section>
-      }
-    </React.Fragment>
-
+        )}
+      </React.Fragment>
+    );
   }
 }
 

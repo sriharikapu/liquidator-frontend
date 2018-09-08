@@ -4,7 +4,7 @@ import type Transport from "@ledgerhq/hw-transport";
 import HookedWalletSubprovider from "web3-provider-engine/dist/es5/subproviders/hooked-wallet";
 import stripHexPrefix from "strip-hex-prefix";
 import EthereumTx from "ethereumjs-tx";
-import AddressGenerator from './address-generator';
+import AddressGenerator from "./address-generator";
 
 const allowedHdPaths = ["44'/1'", "44'/60'", "44'/61'"];
 
@@ -20,7 +20,10 @@ function obtainPathComponentsFromDerivationPath(derivationPath) {
   const regExp = /^(44'\/(?:1|60|61)'\/\d+'?\/)(\d+)$/;
   const matchResult = regExp.exec(derivationPath);
   if (matchResult === null) {
-    throw makeError("To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n ", "InvalidDerivationPath");
+    throw makeError(
+      "To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n ",
+      "InvalidDerivationPath"
+    );
   }
   return { basePath: matchResult[1], index: parseInt(matchResult[2], 10) };
 }
@@ -76,7 +79,12 @@ export default function createLedgerSubprovider(
     ...options
   };
   if (!allowedHdPaths.some(hdPref => path.startsWith(hdPref))) {
-    throw makeError(`Ledger derivation path allowed are ${allowedHdPaths.join(", ")}. ${path} is not supported`, "InvalidDerivationPath");
+    throw makeError(
+      `Ledger derivation path allowed are ${allowedHdPaths.join(
+        ", "
+      )}. ${path} is not supported`,
+      "InvalidDerivationPath"
+    );
   }
 
   const pathComponents = obtainPathComponentsFromDerivationPath(path);
@@ -87,11 +95,14 @@ export default function createLedgerSubprovider(
     const transport = await getTransport();
     try {
       const eth = new AppEth(transport);
-      const addressGenerator = await new AddressGenerator(await eth.getAddress(pathComponents.basePath, askConfirm, true));
+      const addressGenerator = await new AddressGenerator(
+        await eth.getAddress(pathComponents.basePath, askConfirm, true)
+      );
 
       const addresses = {};
-      for (let i = accountsOffset; i < accountsOffset + accountsLength; i++){
-        const path = pathComponents.basePath + (pathComponents.index + i).toString();
+      for (let i = accountsOffset; i < accountsOffset + accountsLength; i++) {
+        const path =
+          pathComponents.basePath + (pathComponents.index + i).toString();
         const address = addressGenerator.getAddressString(i);
         addresses[path] = address;
         addressToPathMap[address.toLowerCase()] = path;
@@ -151,7 +162,10 @@ export default function createLedgerSubprovider(
       const signedChainId = Math.floor((tx.v[0] - 35) / 2);
       const validChainId = networkId & 0xff; // FIXME this is to fixed a current workaround that app don't support > 0xff
       if (signedChainId !== validChainId) {
-        throw makeError(`Invalid networkId signature returned. Expected: ${networkId}, Got: ${signedChainId}`, "InvalidNetworkId");
+        throw makeError(
+          `Invalid networkId signature returned. Expected: ${networkId}, Got: ${signedChainId}`,
+          "InvalidNetworkId"
+        );
       }
 
       return `0x${tx.serialize().toString("hex")}`;

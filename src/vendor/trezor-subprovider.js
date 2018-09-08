@@ -1,8 +1,8 @@
 //@flow
 import HookedWalletSubprovider from "web3-provider-engine/dist/es5/subproviders/hooked-wallet";
 import EthereumTx from "ethereumjs-tx";
-import AddressGenerator from './address-generator';
-import TrezorConnect from './trezor-connect';
+import AddressGenerator from "./address-generator";
+import TrezorConnect from "./trezor-connect";
 
 const allowedHdPaths = ["44'/1'", "44'/60'", "44'/61'"];
 
@@ -18,7 +18,10 @@ function obtainPathComponentsFromDerivationPath(derivationPath) {
   const regExp = /^(44'\/(?:1|60|61)'\/\d+'\/\d+?\/)(\d+)$/;
   const matchResult = regExp.exec(derivationPath);
   if (matchResult === null) {
-    throw makeError("To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n ", "InvalidDerivationPath");
+    throw makeError(
+      "To get multiple accounts your derivation path must follow pattern 44'/60|61'/x'/n ",
+      "InvalidDerivationPath"
+    );
   }
   return { basePath: matchResult[1], index: parseInt(matchResult[2], 10) };
 }
@@ -54,7 +57,12 @@ export default function createTrezorSubprovider(
     ...options
   };
   if (!allowedHdPaths.some(hdPref => path.startsWith(hdPref))) {
-    throw makeError(`Trezor derivation path allowed are ${allowedHdPaths.join(", ")}. ${path} is not supported`, "InvalidDerivationPath");
+    throw makeError(
+      `Trezor derivation path allowed are ${allowedHdPaths.join(
+        ", "
+      )}. ${path} is not supported`,
+      "InvalidDerivationPath"
+    );
   }
 
   const pathComponents = obtainPathComponentsFromDerivationPath(path);
@@ -63,7 +71,7 @@ export default function createTrezorSubprovider(
 
   const createAddressGenerator = derivationPath => {
     return new Promise((resolve, reject) => {
-      TrezorConnect.setCurrency('ETH');
+      TrezorConnect.setCurrency("ETH");
       TrezorConnect.getXPubKey(derivationPath, result => {
         if (result.success) {
           resolve(new AddressGenerator(result));
@@ -72,7 +80,7 @@ export default function createTrezorSubprovider(
         }
       });
     });
-  }
+  };
 
   let alreadyOpenTrezorModal = false;
 
@@ -80,11 +88,17 @@ export default function createTrezorSubprovider(
     try {
       if (!alreadyOpenTrezorModal) {
         alreadyOpenTrezorModal = true;
-        const addressGenerator = await createAddressGenerator(`m/${pathComponents.basePath.slice(0, pathComponents.basePath.length - 1)}`);
+        const addressGenerator = await createAddressGenerator(
+          `m/${pathComponents.basePath.slice(
+            0,
+            pathComponents.basePath.length - 1
+          )}`
+        );
 
         const addresses = {};
-        for (let i = accountsOffset; i < accountsOffset + accountsLength; i++){
-          const path = pathComponents.basePath + (pathComponents.index + i).toString();
+        for (let i = accountsOffset; i < accountsOffset + accountsLength; i++) {
+          const path =
+            pathComponents.basePath + (pathComponents.index + i).toString();
           const address = addressGenerator.getAddressString(i);
           addresses[path] = address;
           addressToPathMap[address.toLowerCase()] = path;
@@ -96,7 +110,7 @@ export default function createTrezorSubprovider(
           return obj;
         }, {});
       }
-    } catch(e) {
+    } catch (e) {
       throw makeError(e);
     } finally {
     }
@@ -104,17 +118,13 @@ export default function createTrezorSubprovider(
 
   function trezorSignMessage(path, data) {
     return new Promise((resolve, reject) => {
-      TrezorConnect.ethereumSignMessage(
-        path,
-        data,
-        result => {
-          if (result.success) {
-            resolve(result);
-          } else {
-            reject(new Error(result.error));
-          }
+      TrezorConnect.ethereumSignMessage(path, data, result => {
+        if (result.success) {
+          resolve(result);
+        } else {
+          reject(new Error(result.error));
         }
-      )
+      });
     });
   }
 
@@ -151,7 +161,8 @@ export default function createTrezorSubprovider(
           } else {
             reject(new Error(result.error));
           }
-      });
+        }
+      );
     });
   }
 
@@ -170,7 +181,10 @@ export default function createTrezorSubprovider(
       const signedChainId = Math.floor((tx.v[0] - 35) / 2);
       const validChainId = networkId & 0xff; // FIXME this is to fixed a current workaround that app don't support > 0xff
       if (signedChainId !== validChainId) {
-        throw makeError(`Invalid networkId signature returned. Expected: ${networkId}, Got: ${signedChainId}`, "InvalidNetworkId");
+        throw makeError(
+          `Invalid networkId signature returned. Expected: ${networkId}, Got: ${signedChainId}`,
+          "InvalidNetworkId"
+        );
       }
       return `0x${tx.serialize().toString("hex")}`;
     } catch (e) {

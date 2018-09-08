@@ -3,7 +3,7 @@
   "etherscanApiKey": "34JVYM6RPM3J1SK8QXQFRNSHD9XG4UHXVU",
   "chain": {
     "kovan": {
-      "nodeURL" : "https://kovan.infura.io/mtXsTjGvCTFRFFHwzn1f",
+      "nodeURL": "https://kovan.infura.io/mtXsTjGvCTFRFFHwzn1f",
       "otc": "0x8cf1cab422a0b6b554077a361f8419cdf122a9f9",
       "threshold": {
         "daieth": 2,
@@ -35,7 +35,7 @@
       "fromBlock": 0
     },
     "main": {
-      "nodeURL" : "https://mainnet.infura.io/mtXsTjGvCTFRFFHwzn1f",
+      "nodeURL": "https://mainnet.infura.io/mtXsTjGvCTFRFFHwzn1f",
       "otc": "0x14fbca95be7e99c15cc2996c6c9d841e54b79425",
       "threshold": {
         "daieth": 2,
@@ -67,6 +67,5 @@
       "fromBlock": 0
     }
   },
-  "gasPriceIncreaseInGwei":3
+  "gasPriceIncreaseInGwei": 3
 }
-    
