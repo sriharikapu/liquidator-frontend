@@ -4,7 +4,7 @@ import { toBytes32, addressToBytes32, toWei, methodSig } from './helpers';
 
 const settings = require('./settings');
 const promisify = Promise.promisify;
-const schema = {};
+export const schema = {};
 
 schema.dstoken = require('./abi/dstoken');
 schema.dsethtoken = require('./abi/dsethtoken');
