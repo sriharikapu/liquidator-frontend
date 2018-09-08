@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import CloseWidget from "./CloseWidget";
+import React, { Component } from 'react';
+import CloseWidget from './CloseWidget';
 
-import Wallets from "./Wallets";
-import LockedAccount from "./LockedAccount";
-import { isAddress } from "../helpers";
-import HardWallet from "./HardWallet";
+import Wallets from './Wallets';
+import LockedAccount from './LockedAccount';
+import { isAddress } from '../helpers';
+import HardWallet from './HardWallet';
 
 class Widget extends Component {
   render() {
@@ -27,12 +27,10 @@ class Widget extends Component {
           />
         ) : this.props.account && isAddress(this.props.account) ? (
           <div>
-            {
-              <CloseWidget
-                account={this.props.account}
-                proxy={this.props.proxy}
-              />
-            }
+            <CloseWidget
+              account={this.props.account}
+              cdpId={this.props.cdpId}
+            />
           </div>
         ) : (
           // Create a decorator Component that returns a component which is wrapped into element with only back function passed as argument

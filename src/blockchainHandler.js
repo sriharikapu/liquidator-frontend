@@ -1,18 +1,18 @@
-import web3 from "./web3";
-import Promise from "bluebird";
-import { toBytes32, addressToBytes32, toWei, methodSig } from "./helpers";
+import web3 from './web3';
+import Promise from 'bluebird';
+import { toBytes32, addressToBytes32, toWei, methodSig } from './helpers';
 
-const settings = require("./settings");
+const settings = require('./settings');
 const promisify = Promise.promisify;
 const schema = {};
 
-schema.dstoken = require("./abi/dstoken");
-schema.dsethtoken = require("./abi/dsethtoken");
-schema.proxyregistry = require("./abi/proxyregistry");
-schema.legacyproxyregistry = require("./abi/legacyproxyregistry");
-schema.dsproxy = require("./abi/dsproxy");
-schema.matchingmarket = require("./abi/matchingmarket");
-schema.proxycreateandexecute = require("./abi/proxycreateandexecute");
+schema.dstoken = require('./abi/dstoken');
+schema.dsethtoken = require('./abi/dsethtoken');
+schema.proxyregistry = require('./abi/proxyregistry');
+schema.legacyproxyregistry = require('./abi/legacyproxyregistry');
+schema.dsproxy = require('./abi/dsproxy');
+schema.matchingmarket = require('./abi/matchingmarket');
+schema.proxycreateandexecute = require('./abi/proxycreateandexecute');
 
 export const objects = {};
 
@@ -73,7 +73,7 @@ export const getTransactionReceipt = tx => {
 };
 
 export const getTransactionCount = address => {
-  return promisify(web3.eth.getTransactionCount)(address, "pending");
+  return promisify(web3.eth.getTransactionCount)(address, 'pending');
 };
 
 export const getNode = () => {
@@ -118,7 +118,7 @@ export const getTokenTrusted = (token, from, to) => {
 export const getProxy = account => {
   return promisify(objects.proxyRegistry.proxies)(account).then(
     r =>
-      r === "0x0000000000000000000000000000000000000000"
+      r === '0x0000000000000000000000000000000000000000'
         ? null
         : getProxyOwner(r).then(r2 => (r2 === account ? r : null))
   );
@@ -134,12 +134,12 @@ export const legacy_getProxy = (registry, account, proxyIndex) => {
 };
 
 export const getProxyOwner = proxy => {
-  return promisify(loadObject("dsproxy", proxy).owner)();
+  return promisify(loadObject('dsproxy', proxy).owner)();
 };
 
 export const isMetamask = () =>
   web3.currentProvider.isMetaMask ||
-  web3.currentProvider.constructor.name === "MetamaskInpageProvider";
+  web3.currentProvider.constructor.name === 'MetamaskInpageProvider';
 
 export const stopProvider = () => {
   web3.stop();
@@ -176,26 +176,26 @@ export const getCallDataAndValue = (
   const result = {};
   const otcBytes32 = addressToBytes32(settings.chain[network].otc, false);
   const fromAddrBytes32 = addressToBytes32(
-    settings.chain[network].tokens[from.replace("eth", "weth")].address,
+    settings.chain[network].tokens[from.replace('eth', 'weth')].address,
     false
   );
   const toAddrBytes32 = addressToBytes32(
-    settings.chain[network].tokens[to.replace("eth", "weth")].address,
+    settings.chain[network].tokens[to.replace('eth', 'weth')].address,
     false
   );
-  if (operation === "sellAll") {
-    if (from === "eth") {
+  if (operation === 'sellAll') {
+    if (from === 'eth') {
       result.calldata =
-        `${methodSig("sellAllAmountPayEth(address,address,address,uint256)")}` +
+        `${methodSig('sellAllAmountPayEth(address,address,address,uint256)')}` +
         `${otcBytes32}${fromAddrBytes32}${toAddrBytes32}${toBytes32(
           limit,
           false
         )}`;
       result.value = toWei(amount);
-    } else if (to === "eth") {
+    } else if (to === 'eth') {
       result.calldata =
         `${methodSig(
-          "sellAllAmountBuyEth(address,address,uint256,address,uint256)"
+          'sellAllAmountBuyEth(address,address,uint256,address,uint256)'
         )}` +
         `${otcBytes32}${fromAddrBytes32}${toBytes32(
           toWei(amount),
@@ -204,7 +204,7 @@ export const getCallDataAndValue = (
     } else {
       result.calldata =
         `${methodSig(
-          "sellAllAmount(address,address,uint256,address,uint256)"
+          'sellAllAmount(address,address,uint256,address,uint256)'
         )}` +
         `${otcBytes32}${fromAddrBytes32}${toBytes32(
           toWei(amount),
@@ -212,18 +212,18 @@ export const getCallDataAndValue = (
         )}${toAddrBytes32}${toBytes32(limit, false)}`;
     }
   } else {
-    if (from === "eth") {
+    if (from === 'eth') {
       result.calldata =
-        `${methodSig("buyAllAmountPayEth(address,address,uint256,address)")}` +
+        `${methodSig('buyAllAmountPayEth(address,address,uint256,address)')}` +
         `${otcBytes32}${toAddrBytes32}${toBytes32(
           toWei(amount),
           false
         )}${fromAddrBytes32}`;
       result.value = limit;
-    } else if (to === "eth") {
+    } else if (to === 'eth') {
       result.calldata =
         `${methodSig(
-          "buyAllAmountBuyEth(address,address,uint256,address,uint256)"
+          'buyAllAmountBuyEth(address,address,uint256,address,uint256)'
         )}` +
         `${otcBytes32}${toAddrBytes32}${toBytes32(
           toWei(amount),
@@ -232,7 +232,7 @@ export const getCallDataAndValue = (
     } else {
       result.calldata =
         `${methodSig(
-          "buyAllAmount(address,address,uint256,address,uint256)"
+          'buyAllAmount(address,address,uint256,address,uint256)'
         )}` +
         `${otcBytes32}${toAddrBytes32}${toBytes32(
           toWei(amount),
@@ -251,11 +251,11 @@ export const getActionCreateProxyAndSellETH = (
   limit
 ) => {
   const addrTo =
-    settings.chain[network].tokens[to.replace("eth", "weth")].address;
+    settings.chain[network].tokens[to.replace('eth', 'weth')].address;
   const result = {};
 
-  if (operation === "sellAll") {
-    result.method = "createAndSellAllAmountPayEth";
+  if (operation === 'sellAll') {
+    result.method = 'createAndSellAllAmountPayEth';
     result.params = [
       settings.chain[network].proxyRegistry,
       settings.chain[network].otc,
@@ -264,7 +264,7 @@ export const getActionCreateProxyAndSellETH = (
     ];
     result.value = toWei(amount);
   } else {
-    result.method = "createAndBuyAllAmountPayEth";
+    result.method = 'createAndBuyAllAmountPayEth';
     result.params = [
       settings.chain[network].proxyRegistry,
       settings.chain[network].otc,
