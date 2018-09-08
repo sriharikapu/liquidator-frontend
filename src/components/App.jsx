@@ -1321,10 +1321,10 @@ class App extends Component {
                 <main className="Container">
                   <div>
                     <div className="MainHeading">
-                      <h1>THE FIRST DECENTRALIZED INSTANT MARKETPLACE</h1>
+                      <h1>Close Your CDP</h1>
                     </div>
                     <div className="SecondaryHeading">
-                      <h2>No Registration. No Fees.</h2>
+                      <h2>No Funds Required. Low Fees.</h2>
                     </div>
                   </div>
                   {this.renderWidget()}
