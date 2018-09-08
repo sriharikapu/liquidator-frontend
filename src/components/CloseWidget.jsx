@@ -3,7 +3,7 @@ import web3 from '../web3';
 import * as Blockchain from '../blockchainHandler';
 
 const KOVAN_SAI_TUB = '0xa71937147b55deb8a530c7229c442fd3f31b7db2';
-const KOVAN_LIQUIDATOR = '0x47894c96e934a9f43f6ad782e2bc12b2bbc0160b';
+const KOVAN_LIQUIDATOR = '0x49db80eede41828680967e3b54c295148b111d58';
 
 const padLeft = (string, chars, sign) => {
   return new Array(chars - string.length + 1).join(sign ? sign : '0') + string;
