@@ -113,7 +113,7 @@ class CloseWidget extends Component {
           approve proxy for PETH transfer
         </button>
         <br />
-        <button onClick={this.giveCdp}>give CDP to liquidator</button>
+        <button onClick={this.giveCdp}>give CDP to proxy</button>
         <br />
         <button onClick={this.closeCdp}>liquidate CDP</button>
       </section>
