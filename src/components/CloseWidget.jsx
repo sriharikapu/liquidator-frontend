@@ -95,27 +95,34 @@ class CloseWidget extends Component {
   render() {
     return (
       <section className="frame">
-        <form>
-          <label>
-            CDP ID:
-            <input
-              type="text"
-              name="cdpId"
-              value={this.state.cdpId}
-              onChange={this.handleChange}
-            />
-          </label>
-        </form>
-        <br />
-        <button onClick={this.createProxy}>create Proxy</button>
-        <br />
-        <button onClick={this.allowProxyPeth}>
-          approve proxy for PETH transfer
-        </button>
-        <br />
-        <button onClick={this.giveCdp}>give CDP to proxy</button>
-        <br />
-        <button onClick={this.closeCdp}>liquidate CDP</button>
+        <div>
+          <h1 style={{ color: 'black' }}>Setup</h1>
+          <br />
+          <button onClick={this.createProxy}>create Proxy</button>
+          <br />
+          <button onClick={this.allowProxyPeth}>
+            approve proxy for PETH transfer
+          </button>
+          <br />
+        </div>
+        <div>
+          <br />
+          <h1 style={{ color: 'black' }}>Liquidation</h1>
+          <form>
+            <label>
+              <input
+                type="text"
+                name="cdpId"
+                placeholder="CDP ID"
+                value={this.state.cdpId}
+                onChange={this.handleChange}
+              />
+            </label>
+          </form>
+          <button onClick={this.giveCdp}>give CDP to proxy</button>
+          <br />
+          <button onClick={this.closeCdp}>liquidate CDP</button>
+        </div>
       </section>
     );
   }
