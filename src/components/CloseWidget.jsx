@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import web3 from '../web3';
+import { toBytes32, addressToBytes32, methodSig } from '../helpers';
 import * as Blockchain from '../blockchainHandler';
 
 const KOVAN_SAI_TUB = '0xa71937147b55deb8a530c7229c442fd3f31b7db2';
 const KOVAN_LIQUIDATOR = '0x49db80eede41828680967e3b54c295148b111d58';
+const KOVAN_LIQUIDATOR_PROXY = '0xd74a2649b334a5456ca0b5ddad945b8f8a335e34';
+const KOVAN_PETH = '0xf4d791139ce033ad35db2b2201435fad668b1b64';
+const KOVAN_WETH = '0xd0a1e359811322d97991e03f863a0c30c2cf029c';
 
-const padLeft = (string, chars, sign) => {
-  return new Array(chars - string.length + 1).join(sign ? sign : '0') + string;
-};
-
-const toBytes32 = (x, prefix = true) => {
-  let y = web3.toHex(x);
-  y = y.replace('0x', '');
-  y = padLeft(y, 64);
-  if (prefix) y = '0x' + y;
-  return y;
+const check = (err, data) => {
+  if (err) {
+    throw err;
+  }
 };
 
 class CloseWidget extends Component {
@@ -22,6 +20,8 @@ class CloseWidget extends Component {
     super(props);
     this.state = {};
     this.handleChange = this.handleChange.bind(this);
+    this.allowProxyWeth = this.allowProxyWeth.bind(this);
+    this.allowProxyPeth = this.allowProxyPeth.bind(this);
     this.giveCdp = this.giveCdp.bind(this);
     this.closeCdp = this.closeCdp.bind(this);
   }
@@ -30,31 +30,63 @@ class CloseWidget extends Component {
     this.setState({ cdpId: event.target.value });
   }
 
+  allowProxyWeth() {
+    const weth = web3.eth
+      .contract(Blockchain.schema.dstoken.abi)
+      .at(KOVAN_WETH);
+
+    console.log(`APPROVING ${this.props.proxy} to transfer WETH`);
+    weth.approve(
+      this.props.proxy,
+      toBytes32(web3.toWei(10000, 'ether')),
+      err => {
+        check(err);
+        console.log('approve tx sent');
+      }
+    );
+  }
+
+  allowProxyPeth() {
+    const peth = web3.eth
+      .contract(Blockchain.schema.dstoken.abi)
+      .at(KOVAN_PETH);
+
+    console.log(`APPROVING ${this.props.proxy} to transfer PETH`);
+    peth.approve(
+      this.props.proxy,
+      toBytes32(web3.toWei(10000, 'ether')),
+      err => {
+        check(err);
+        console.log('approve tx sent');
+      }
+    );
+  }
+
   giveCdp() {
     const tub = web3.eth.contract(Blockchain.schema.saitub).at(KOVAN_SAI_TUB);
 
-    console.log(`GIVING ${this.state.cdpId} to ${KOVAN_LIQUIDATOR}`);
-    tub.give(toBytes32(this.state.cdpId), KOVAN_LIQUIDATOR, err => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log('GIVEN :)');
+    console.log(`GIVING ${this.state.cdpId} to ${this.props.proxy}`);
+    tub.give(toBytes32(this.state.cdpId), this.props.proxy, err => {
+      check(err);
+      console.log('give tx sent');
     });
   }
 
   closeCdp() {
-    const liquidator = web3.eth
-      .contract(Blockchain.schema.liquidator)
-      .at(KOVAN_LIQUIDATOR);
+    const proxy = web3.eth
+      .contract(Blockchain.schema.dsproxy.abi)
+      .at(this.props.proxy);
+
+    const callData =
+      methodSig('giveAndClose(address,bytes32,address)') +
+      addressToBytes32(KOVAN_SAI_TUB, false) +
+      toBytes32(this.state.cdpId, false) +
+      addressToBytes32(KOVAN_LIQUIDATOR, false);
 
     console.log(`CLOSING ${this.state.cdpId}`);
-    liquidator.close(toBytes32(this.state.cdpId), err => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      console.log('CLOSED :)');
+    proxy.execute['address,bytes'](KOVAN_LIQUIDATOR_PROXY, callData, err => {
+      check(err);
+      console.log('close tx sent');
     });
   }
 
@@ -72,6 +104,14 @@ class CloseWidget extends Component {
             />
           </label>
         </form>
+        <br />
+        <button onClick={this.allowProxyWeth}>
+          approve proxy for WETH transfer
+        </button>
+        <br />
+        <button onClick={this.allowProxyPeth}>
+          approve proxy for PETH transfer
+        </button>
         <br />
         <button onClick={this.giveCdp}>give CDP to liquidator</button>
         <br />
