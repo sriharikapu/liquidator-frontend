@@ -11,6 +11,7 @@ schema.dsethtoken = require('./abi/dsethtoken');
 schema.proxyregistry = require('./abi/proxyregistry');
 schema.legacyproxyregistry = require('./abi/legacyproxyregistry');
 schema.dsproxy = require('./abi/dsproxy');
+schema.dsproxyfactory = require('./abi/dsproxyfactory');
 schema.matchingmarket = require('./abi/matchingmarket');
 schema.proxycreateandexecute = require('./abi/proxycreateandexecute');
 schema.liquidator = require('./abi/liquidator');
