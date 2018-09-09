@@ -107,7 +107,7 @@ class CloseWidget extends Component {
         </div>
         <div>
           <br />
-          <h1 style={{ color: 'black' }}>Liquidation</h1>
+          <h1 style={{ color: 'black' }}>Close</h1>
           <form>
             <label>
               <input
@@ -121,7 +121,7 @@ class CloseWidget extends Component {
           </form>
           <button onClick={this.giveCdp}>give CDP to proxy</button>
           <br />
-          <button onClick={this.closeCdp}>liquidate CDP</button>
+          <button onClick={this.closeCdp}>Close CDP</button>
         </div>
       </section>
     );
